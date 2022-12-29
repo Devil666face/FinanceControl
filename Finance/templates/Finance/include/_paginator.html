@@ -1,0 +1,9 @@
+{% load static %}
+{% load custom_filters %}
+{% for month_item in month_list %}
+<div class="list-group">
+  {% get_str_month month_item as str_month %}
+  <a class="list-group-item mb-1 list-group-item-action {% if current_month == month_item %}list-group-item-dark{% endif %}"
+      href="{% url 'order_list' %}?month={{month_item}}">{{str_month}}</a>
+</div>
+{% endfor %}

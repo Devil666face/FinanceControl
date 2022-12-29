@@ -1,0 +1,20 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="filterModal">Filter</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+					<form method="GET" class="d-flex flex-column">
+						{{filter.form|crispy}}
+					<input type="hidden" name="month" value="{{current_month}}">
+          <button type="submit" class="btn btn-info mb-3 mt-3 icon-search"">
+              Search</button>
+				</form>
+      </div>
+    </div>
+  </div>
+</div>

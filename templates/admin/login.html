@@ -1,0 +1,22 @@
+{% extends 'base_login.html' %}
+{% block login %}
+<input type="text" 
+        name="username" 
+        autofocus="" 
+        autocapitalize="none" 
+        autocomplete="username" 
+        maxlength="150" 
+        required="" 
+        id="id_username"
+        class="form-control"
+        placeholder="Login">
+{% endblock %}
+{% block password %}
+<input type="password" 
+        name="password" 
+        autocomplete="current-password" 
+        required="" 
+        id="id_password"
+        class="form-control"
+        placeholder="Password">
+{% endblock %}

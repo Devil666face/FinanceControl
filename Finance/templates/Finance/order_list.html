@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}
+{% if order_list %}Order list{% else %}Not some order{% endif %}
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.css' %}">
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="row m-auto d-flex justify-content-between align-items-start mt-3">
+    <div class="col-xl-2 col-md-3 rounded-5 p-3 shadow-lg blur bg-transparent shadow-lg border border-light border-opacity-75 mb-3 d-flex flex-column">
+        {% show_paginator current_month %}
+        <button type="button" class="btn btn-outline-info mb-1 icon-list-add" data-bs-toggle="modal" data-bs-target="#orderCreateModal">
+            Add order
+        </button>
+        {% if order_list %}
+        <button type="button" class="btn btn-outline-info mb-1 icon-filter" data-bs-toggle="modal" data-bs-target="#filterModal">
+            Filter
+        </button>
+        {% endif %}
+        <button type="button" class="btn btn-outline-info icon-list-add" data-bs-toggle="modal" data-bs-target="#orderReportModal">
+            Report
+        </button>
+    </div>
+    <div class="col-xl-9 col-md-8 rounded-5 p-4 shadow-lg blur bg-transparent border border-light border-opacity-75 d-flex flex-column">
+        {% for order in order_list %}
+        <div class="card bg-light rounded-3 shadow {% if forloop.last %}{% else %}mb-3{% endif %}">
+            <div class="card-header d-flex justify-content-between">
+                <div class="">{{order.category}}</div>
+                <button id="delete_{{order.pk}}" class="btn-close" onclick="deleteOrder(this)"></button>
+            </div>
+                {% if order.has_image %}
+                    {% show_carousel order forloop.counter0 %}
+                {% endif %}
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <a class="nav-link card-text" href="{% url 'update_order' order.pk %}">{{order.title}}</a>
+                <span class="badge fs-6 bg-{% if order.count < 0 %}danger{% else %}success{% endif %}">
+                    {{order.count}}</span>
+            </div>
+            <div class="card-footer text-muted">
+                {{order.created_at}}
+            </div>
+        </div>
+        {% empty %}
+        <div class="card bg-light rounded-3 shadow">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <p class="nav-link card-text">Not some order</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% include 'Finance/modal.html' %}
+{% include 'Finance/include/_filter_modal.html' %}
+{% include 'Finance/include/_report_modal.html' %}
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/deleteorder.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+{% endblock %}

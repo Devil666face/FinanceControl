@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+  <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+{% endblock %}
+{% block container %}
+<main
+  class="form-signin text-center blur w-100 m-auto bg-transparent border border-light border-opacity-75 p-4 shadow-lg rounded-4">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <script src="{% static 'js/fudrjiwc.js' %}"></script>
+    <lord-icon
+        src="{% static 'icons/coin.json' %}"
+        trigger="hover"
+        style="width:250px;height:250px">
+    </lord-icon>
+    <h1 class="h3 mb-3 fw-normal">Sign in</h1>
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger text-left" role="alert">{{ form.non_field_errors|striptags }}</div>
+    {% endif %}
+    <div class="form-floating">
+      {% block login %}{% endblock %}
+      <label for="floatingInput" class="">Login</label>
+    </div>
+    <div class="form-floating">
+      {% block password %}{% endblock %}
+      <label for="floatingPassword" class="">Password</label>
+    </div>
+    <button class="w-100 mt-3 btn btn-lg btn-outline-dark" type="submit">Login</button>
+  </form>
+</main>
+{% endblock %}

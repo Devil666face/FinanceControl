@@ -1,0 +1,9 @@
+
+.icon-list-add:before { content: '\e800'; } /* '' */
+.icon-search:before { content: '\e801'; } /* '' */
+.icon-tags:before { content: '\e802'; } /* '' */
+.icon-chart-pie-outline:before { content: '\e803'; } /* '' */
+.icon-undo:before { content: '\e804'; } /* '' */
+.icon-logout:before { content: '\f02d'; } /* '' */
+.icon-filter:before { content: '\f0b0'; } /* '' */
+.icon-gauge:before { content: '\f0e4'; } /* '' */

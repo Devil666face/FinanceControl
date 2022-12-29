@@ -1,0 +1,23 @@
+{% load static %}
+<div class="modal fade" id="orderCreateModal" tabindex="-1" aria-labelledby="orderCreateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="orderCreateModalLabel">Create order</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'create_order' %}">
+          {% csrf_token %}
+          {{form.as_p}}
+          <div class="row mt-4">
+              <div class="col">
+                  <button type="submit" class="btn btn-info shadow form-control icon-list-add">
+                      Add</button>
+              </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
