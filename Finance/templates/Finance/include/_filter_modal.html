@@ -4,7 +4,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="filterModal">Filter</h1>
+        <h1 class="modal-title fs-5" id="filterModal">
+          <i class="bi-funnel"></i>
+          Filter</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -12,7 +14,8 @@
 						{{filter.form|crispy}}
 					<input type="hidden" name="month" value="{{current_month}}">
           <button type="submit" class="btn btn-info mb-3 mt-3 icon-search"">
-              Search</button>
+            <i class="bi-search"></i>
+            Search</button>
 				</form>
       </div>
     </div>

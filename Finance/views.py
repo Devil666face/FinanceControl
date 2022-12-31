@@ -134,11 +134,6 @@ class ReportCreateView(LoginMixin, CreateView):
     template_name = 'form.html'
     success_url = reverse_lazy('order_list')
 
-    def get(self, request, *args, **kwargs):
-        if DEBUG:
-            Report.objects.all().delete()
-        return super().get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         request.POST._mutable = True
         self.date_month = request.POST.get('date_month')+'-01'

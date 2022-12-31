@@ -3,7 +3,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="orderCreateModalLabel">Create order</h1>
+        <h1 class="modal-title fs-5" id="orderCreateModalLabel">
+          <i class="bi-node-plus"></i>
+          Create order</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -11,10 +13,11 @@
           {% csrf_token %}
           {{form.as_p}}
           <div class="row mt-4">
-              <div class="col">
-                  <button type="submit" class="btn btn-info shadow form-control icon-list-add">
-                      Add</button>
-              </div>
+            <div class="col">
+                <button type="submit" class="btn btn-info shadow form-control icon-list-add">
+                  <i class="bi-file-plus"></i>
+                  Add</button>
+            </div>
           </div>
         </form>
       </div>

@@ -1,6 +1,23 @@
 from Finance.utils import get_first_last_date_for_month
 from Finance.models import Order, Category
 from datetime import datetime
+from django.shortcuts import render
+from io import BytesIO
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+
+
+class Render:
+	def __init__(self, template, context:dict):
+		template = get_template(template)
+		self.html = template.render(context)
+		self.result = BytesIO()
+		self.pdf = pisa.pisaDocument(BytesIO(self.html.encode("ISO-8859-1")), self.result)
+
+	def get_pdf(self):
+		if not self.pdf.err:
+			return HttpResponse(self.result.getvalue(), content_type="application/pdf")
 
 
 class ReportMaker:

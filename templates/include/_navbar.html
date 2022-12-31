@@ -1,24 +1,30 @@
 {% load static %}
 {% load custom_filters %}
 <div class="d-flex justify-content-between align-items-center">
-  <a class="nav-link fw-bold py-1 px-0 float-md-start fs-3" href="{% url 'order_list' %}">Finance control</a>
+  <a class="nav-link fw-bold py-1 px-0 float-md-start fs-5" href="{% url 'order_list' %}">
+    <i class="bi-cash-coin"></i>
+    Finance control</a>
   <nav class="nav nav-masthead justify-content-center float-md-end">
     {% comment %}
     {% url 'create_order' as the_url %}
     <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
-      Add order</a>
+     Add order</a>
     {% endcomment %}
     {% url 'create_category' as the_url %}
-    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %} icon-tags" href="{{the_url}}">
+    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
+      <i class="bi-plus-circle"></i>
       Add category</a>
     {% url 'statistic' as the_url %}
-    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %} icon-chart-pie-outline" href="{{the_url}}">
+    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
+      <i class="bi-file-bar-graph"></i>
       Statistic</a>
     {% url 'admin:index' as the_url %}
-    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %} icon-gauge" href="{{the_url}}">
+    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
+      <i class="bi-gear"></i>
       Admin</a>
     {% url 'logout' as the_url %}
-    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %} icon-logout" href="{{the_url}}">
+    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
+      <i class="bi-box-arrow-right"></i>
       Logout</a>
   </nav>
 </div>
