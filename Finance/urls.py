@@ -27,6 +27,7 @@ category = [
 
 report = [
     path('report/create/', ReportCreateView.as_view(), name='create_report'),
+    path('report/<slug:slug>/', ReportDetailView.as_view(), name='report'),
 ]
 
 

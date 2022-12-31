@@ -1,0 +1,21 @@
+{% load static %}
+{% load custom_filters %}
+
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <style>
+		{% font_abs_path '/fonts/arial.ttf' as font %}
+		@font-face { font-family: Arial; src: url({{font}}); }
+		* { font-family: Arial; }
+	</style>
+</head>
+<body>
+	{% for row in table_for_record %}
+		{% for record in row %}
+			<h1>{{record}}</h1>	
+		{% endfor %}
+	{% endfor %}
+</body>
+</html>

@@ -1,23 +1,27 @@
+import os
 from Finance.utils import get_first_last_date_for_month
 from Finance.models import Order, Category
-from datetime import datetime
 from django.shortcuts import render
-from io import BytesIO
 from django.template.loader import get_template
-from django.http import HttpResponse
 from xhtml2pdf import pisa
+from datetime import datetime
 
 
 class Render:
-	def __init__(self, template, context:dict):
+	def __init__(self, obj, template, context:dict):
+		self.obj = obj
 		template = get_template(template)
 		self.html = template.render(context)
-		self.result = BytesIO()
-		self.pdf = pisa.pisaDocument(BytesIO(self.html.encode("ISO-8859-1")), self.result)
-
-	def get_pdf(self):
-		if not self.pdf.err:
-			return HttpResponse(self.result.getvalue(), content_type="application/pdf")
+		self.file = f'{self._get_path_to_save()}{self.obj.title}'
+		with open(self.file,'w+b') as file:
+			status = pisa.CreatePDF(self.html.encode('UTF-8'), dest=file, encoding='UTF-8')
+		self.obj.file = self.file.replace('media/','')
+			
+	def _get_path_to_save(self):
+		path_to_save = datetime.today().strftime('media/report/%Y/%m/%d/')
+		if not os.path.exists(path_to_save):
+			os.makedirs(path_to_save)
+		return path_to_save
 
 
 class ReportMaker:
@@ -27,16 +31,19 @@ class ReportMaker:
 		self.obj.title = self._get_title(current_month)
 		self.queryset = self._get_queryset(current_month)
 		self.table_for_record = self._make_table_for_record()
+		print(self.table_for_record)
 		self.average_dict = self._count_average()
 		self.percent_of_revenue = self._count_percent()
-		print(self.average_dict)
+		Render(self.obj, 'Finance/report.html', self.get_dict())
 
 	def _count_percent(self):
+		percent_of_revenue = dict()
 		revenue = self.average_dict['Revenue']
 		for cat_key in self.average_dict:
 			percent = abs(self.average_dict[cat_key]/revenue)*100
-			print(percent)
-		
+			percent_of_revenue[cat_key] = percent
+		return percent_of_revenue
+	
 	def _count_average(self):
 		current_category_list = set([order.category for order in self.queryset])
 		average_dict = {category:0 for category in current_category_list}
@@ -57,7 +64,7 @@ class ReportMaker:
 	def _make_table_for_record(self):
 
 		def _get_row(order):
-			return [order.created_at.strftime('%Y-%m-%d %H:%M'), order.title, order.count, order.category.title]
+			return [order.created_at.strftime('%Y-%m-%d %H:%M'), order.title, order.count, str(order.category.title)]
 		
 		table_for_record = [_get_row(order) for order in self.queryset]
 		return table_for_record
@@ -71,3 +78,8 @@ class ReportMaker:
 
 	def get_obj(self):
 		return self.obj
+
+	def get_dict(self):
+		return {"table_for_record":self.table_for_record,
+				"average_dict":self.average_dict,
+				"percent_of_revenue":self.percent_of_revenue,}

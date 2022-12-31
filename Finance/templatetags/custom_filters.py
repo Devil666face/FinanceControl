@@ -1,3 +1,4 @@
+from config.settings import STATIC_ROOT
 from django.template import Library
 from datetime import datetime
 from Finance.models import Image
@@ -32,3 +33,7 @@ def show_carousel(order, order_id):
     # image_list = Image.objects.filter(order=order)
     image_list = order.images.all()
     return {'image_list':image_list, 'order_id':order_id}
+
+@register.simple_tag(name='font_abs_path')
+def font_abs_path(path):
+    return STATIC_ROOT+path

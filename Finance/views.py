@@ -62,7 +62,7 @@ class PasswordChangeDoneView(PasswordChangeDoneView):
     next_page = '/'
 
 
-class OrderListView(LoginMixin, ListView):
+class OrderListView(ListView):
     model = Order
     template_name = 'Finance/order_list.html'
 
@@ -82,11 +82,11 @@ class OrderListView(LoginMixin, ListView):
         return context
 
 
-class OrderDetailView(LoginMixin, DetailView):
+class OrderDetailView(OrderMixin, DetailView):
     pass
 
 
-class OrderCreateView(LoginMixin, OrderMixin, CreateView):
+class OrderCreateView(OrderMixin, CreateView):
     form_class = OrderCreateForm
 
     def post(self, request, *args, **kwargs):
@@ -103,11 +103,11 @@ class OrderCreateView(LoginMixin, OrderMixin, CreateView):
         return super().form_valid(form)
 
 
-class OrderUpdateView(LoginMixin, OrderMixin, UpdateView):
+class OrderUpdateView(OrderMixin, UpdateView):
     form_class = OrderCreateForm
 
 
-class OrderDeleteView(LoginMixin, OrderMixin, DeleteView):
+class OrderDeleteView(OrderMixin, DeleteView):
     
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         self.delete(request, *args, **kwargs)
@@ -127,10 +127,9 @@ class CategoryCreateView(LoginMixin, CreateView):
 
 class ReportCreateView(LoginMixin, CreateView):
     model = Report
-    form_class = ReportCreateForm
     template_name = 'form.html'
-    success_url = reverse_lazy('order_list')
-
+    form_class = ReportCreateForm
+    
     def post(self, request, *args, **kwargs):
         request.POST._mutable = True
         self.date_month = request.POST.get('date_month')+'-01'
@@ -140,7 +139,15 @@ class ReportCreateView(LoginMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object = ReportMaker(self.object).get_obj()
+        self.report_object = ReportMaker(self.object)
+        self.object = self.report_object.get_obj()
         self.object.save()
         return super().form_valid(form)
-        
+
+
+class ReportDetailView(LoginMixin, DetailView):
+    model = Report
+
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+        return HttpResponse(self.object.file, content_type="application/pdf")
