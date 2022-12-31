@@ -34,6 +34,7 @@
         </button>
     </div>
     <div class="col-xl-9 col-md-8 rounded-5 p-4 shadow-lg blur bg-transparent border border-light border-opacity-75 d-flex flex-column">
+        {% csrf_token %}
         {% for order in order_list %}
         <div class="card bg-light rounded-3 shadow {% if forloop.last %}{% else %}mb-3{% endif %}">
             <div class="card-header d-flex justify-content-between">

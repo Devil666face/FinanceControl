@@ -112,9 +112,14 @@ class OrderUpdateView(LoginMixin, OrderMixin, UpdateView):
 
 class OrderDeleteView(LoginMixin, OrderMixin, DeleteView):
     
-    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         self.delete(request, *args, **kwargs)
         return redirect(request.META.get('HTTP_REFERER','/'))
+
+    # def delete(self, request, *args, **kwargs):
+    #     self.form_valid
+    #     self.delete(request, args, kwargs)
+    #     return HttpResponse('')
 
 
 class CategoryDetailView(LoginMixin, DetailView):
