@@ -75,14 +75,11 @@ class OrderListView(LoginMixin, ListView):
         context['current_month'] = self.current_month
         context['form'] = OrderCreateForm()
         first_day, last_day = get_first_last_date_for_month(self.current_month)
+        print(first_day, last_day)
         context['filter'] = OrderFilter(self.request.GET, queryset=Order.objects.filter(created_at__gte=first_day, created_at__lte=last_day))
         context['order_list'] = context['filter'].qs
         context['report'] = ReportCreateForm()
         return context
-
-    # def get_queryset(self):
-    #     first_day, last_day = get_first_last_date_for_month(self.current_month)
-    #     return Order.objects.filter(created_at__gte=first_day, created_at__lte=last_day)
 
 
 class OrderDetailView(LoginMixin, DetailView):
@@ -115,11 +112,6 @@ class OrderDeleteView(LoginMixin, OrderMixin, DeleteView):
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         self.delete(request, *args, **kwargs)
         return redirect(request.META.get('HTTP_REFERER','/'))
-
-    # def delete(self, request, *args, **kwargs):
-    #     self.form_valid
-    #     self.delete(request, args, kwargs)
-    #     return HttpResponse('')
 
 
 class CategoryDetailView(LoginMixin, DetailView):
