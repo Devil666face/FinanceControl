@@ -62,7 +62,7 @@ class PasswordChangeDoneView(PasswordChangeDoneView):
     next_page = '/'
 
 
-class OrderListView(ListView):
+class OrderListView(LoginMixin, ListView):
     model = Order
     template_name = 'Finance/order_list.html'
 
@@ -129,7 +129,10 @@ class ReportCreateView(LoginMixin, CreateView):
     model = Report
     template_name = 'form.html'
     form_class = ReportCreateForm
-    
+
+    def get_success_url(self):
+        return reverse_lazy('report_pdf',kwargs={'slug':self.object.slug})   
+
     def post(self, request, *args, **kwargs):
         request.POST._mutable = True
         self.date_month = request.POST.get('date_month')+'-01'
@@ -141,13 +144,22 @@ class ReportCreateView(LoginMixin, CreateView):
         self.object = form.save(commit=False)
         self.report_object = ReportMaker(self.object)
         self.object = self.report_object.get_obj()
-        self.object.save()
-        return super().form_valid(form)
+        if self.report_object.queryset:
+            self.object.save()
+            return super().form_valid(form)
+        else:
+            form.add_error(None,'Orders for current month not found')
+            return super().form_invalid(form)
 
 
-class ReportDetailView(LoginMixin, DetailView):
+class ReportDetailViewPdf(LoginMixin, DetailView):
     model = Report
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
         return HttpResponse(self.object.file, content_type="application/pdf")
+
+
+class ReportListView(LoginMixin, ListView):
+    model = Report
+    template_name = 'report_list'

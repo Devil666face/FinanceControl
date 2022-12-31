@@ -11,6 +11,7 @@ class Render:
 	def __init__(self, obj, template, context:dict):
 		self.obj = obj
 		template = get_template(template)
+		context['obj'] = self.obj
 		self.html = template.render(context)
 		self.file = f'{self._get_path_to_save()}{self.obj.title}'
 		with open(self.file,'w+b') as file:
@@ -30,11 +31,12 @@ class ReportMaker:
 		current_month = str(self.obj.date_month).split('-')[1]
 		self.obj.title = self._get_title(current_month)
 		self.queryset = self._get_queryset(current_month)
-		self.table_for_record = self._make_table_for_record()
-		print(self.table_for_record)
-		self.average_dict = self._count_average()
-		self.percent_of_revenue = self._count_percent()
-		Render(self.obj, 'Finance/report.html', self.get_dict())
+		if self.queryset:
+			self.table_for_record = self._make_table_for_record()
+			print(self.table_for_record)
+			self.average_dict = self._count_average()
+			self.percent_of_revenue = self._count_percent()
+			Render(self.obj, 'Finance/report.html', self.get_dict())
 
 	def _count_percent(self):
 		percent_of_revenue = dict()
@@ -59,6 +61,9 @@ class ReportMaker:
 		average_dict['Balance'] = balance
 		average_dict['Revenue'] = revenue
 		average_dict['Expend'] = expend
+		self.obj.balance = balance
+		self.obj.revenue = revenue
+		self.obj.expend = expend
 		return average_dict
 	
 	def _make_table_for_record(self):

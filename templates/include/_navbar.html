@@ -14,6 +14,10 @@
     <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
       <i class="bi-plus-circle"></i>
       Add category</a>
+    {% url 'report_list' as the_url %}
+    <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
+      <i class="bi-card-list"></i>
+      Reports</a>
     {% url 'statistic' as the_url %}
     <a class="nav-link fw-bold py-1 px-0 {% if the_url == current_page %}active{% endif %}" href="{{the_url}}">
       <i class="bi-file-bar-graph"></i>

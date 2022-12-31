@@ -9,13 +9,99 @@
 		{% font_abs_path '/fonts/arial.ttf' as font %}
 		@font-face { font-family: Arial; src: url({{font}}); }
 		* { font-family: Arial; }
-	</style>
+		h1,h2, td { text-align: center;}
+		table {
+		   border-collapse: collapse;
+		   /*убираем пустые промежутки между ячейками*/
+		   border: 1px solid black;
+		   /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+		}
+		th, td {
+		   border: 1px solid black;
+			padding: 3px;
+		}
+</style>
 </head>
 <body>
+<h1>{{obj.title}}</h1>
+<h2>Orders</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Date</th>
+      <th scope="col">Title</th>
+      <th scope="col">Value</th>
+      <th scope="col">Category</th>
+    </tr>
+  </thead>
+  <tbody>
 	{% for row in table_for_record %}
+    <tr>
 		{% for record in row %}
-			<h1>{{record}}</h1>	
+			{% if forloop.counter0 == 0 %}
+      <th scope="row">{{forloop.parentloop.counter}}</th>
+			<td>{{record}}</td>
+			{% else %}
+      <td>{{record}}</td>
+			{% endif %}
 		{% endfor %}
+    </tr>
 	{% endfor %}
+  </tbody>
+</table>
+
+<h2>Average for category</h2>
+{% total average_dict as len %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Category</th>
+      <th scope="col">Value</th>
+      <th scope="col">Percent</th>
+    </tr>
+  </thead>
+  <tbody>
+		{% for key, value in average_dict.items %}
+		{% not_show len forloop.counter0 as show %}
+		{% if show %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+			<td>{{key}}</td>
+      <td>{{value}}</td>
+			{% get_percent percent_of_revenue forloop.counter0 as percent %}
+      <td>{{percent|floatformat}}</td>
+    </tr>
+		{% endif %}
+		{% endfor %}
+  </tbody>
+</table>
+
+<h2>Average total</h2>
+{% total average_dict as len %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Total</th>
+      <th scope="col">Value</th>
+			<th scope="col">Percent</th>
+    </tr>
+  </thead>
+  <tbody>
+		{% for key, value in average_dict.items %}
+		{% not_show len forloop.counter0 as show %}
+		{% if show %}
+		{% else %}
+    <tr>
+			<td>{{key}}</td>
+      <td>{{value}}</td>
+			{% get_percent percent_of_revenue forloop.counter0 as percent %}
+      <td>{{percent|floatformat}}</td>
+    </tr>
+		{% endif %}
+		{% endfor %}
+  </tbody>
+</table>
 </body>
 </html>

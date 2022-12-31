@@ -78,6 +78,9 @@ class Report(models.Model):
     file = models.FileField(upload_to='report/%Y/%m/%d/', null=True, blank=True, verbose_name='Report file')
     date_month = models.DateField(verbose_name='Date')
     slug = models.SlugField(null=True, blank=True, editable=False, unique=True)
+    revenue = models.IntegerField(default=0, blank=False, null=False)
+    expend = models.IntegerField(default=0, blank=False, null=False)
+    balance = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
         return self.title
