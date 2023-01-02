@@ -1,0 +1,2 @@
+1. Add model for total's for every category. fields Report(ForKey), Category, Value, Percent
+2. Add charts on detail view for Report
