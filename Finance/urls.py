@@ -21,6 +21,7 @@ report = [
     path('report/create/', ReportCreateView.as_view(), name='create_report'),
     path('report/', ReportListView.as_view(), name='report_list'),
     path('report/<slug:slug>', ReportDetailView.as_view(), name='report'),
+    path('report/<slug:slug>/delete', ReportDeleteView.as_view(), name='delete_report'),
     path('report/<slug:slug>/pdf', ReportDetailViewPdf.as_view(), name='report_pdf'),
 ]
 

@@ -6,11 +6,24 @@
 {% endblock title %}
 
 {% block css %}
+<style>
+tr.htmx-swapping td {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+tr.htmx-swapping th {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+</style>
 {% endblock %}
 
 {% block container %}
 <div class="rounded-5 p-4 shadow-lg blur bg-transparent border border-light border-opacity-75 d-flex flex-column">
-{% csrf_token %}
+
+{% if report_list %}
+<div class="table-responsive">
 	<table class="table table-light table-hover">
 		<thead class="table-info">
 			<tr>
@@ -23,7 +36,7 @@
 	      <th scope="col"></th>
 	    </tr>
 	  </thead>
-	  <tbody class="table-group-divider">
+	  <tbody class="table-group-divider" hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
     {% for report in report_list %}
 	    <tr>
 	      <th scope="row">{{forloop.counter}}</th>
@@ -32,16 +45,12 @@
 	      <td>{{report.revenue}}</td>
 	      <td>{{report.expend}}</td>
 	      <td>{{report.balance}}</td>
-	      <td>delete</td>
+	      <td><button id="delete_{{report.slug}}" 
+					class="btn-close"
+					hx-post="{% url 'delete_report' report.slug %}"
+					hx-vals='{"slug":"{{report.slug}}", "csrfmiddlewaretoken":"{{ csrf_token }}"}'></button></td>
 	    </tr>
-    {% empty %}
-      <div class="card bg-light rounded-3 shadow">
-        <div class="card-body d-flex justify-content-between align-items-center">
-          <p class="nav-link card-text">Not some order</p>
-        </div>
-      </div>
     {% endfor %}
-		{% if report_list %}
 		<tr class="table-dark">
       <td colspan="3">Total</td>
       <td>{{revenue}}</td>
@@ -49,12 +58,26 @@
       <td>{{balance}}</td>
       <td></td>
 		</tr>
-		{% endif %}
 	  </tbody>
 	</table>
+	{% else %}
+    <div class="card bg-light rounded-3 shadow">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <p class="nav-link card-text">Not some report</p>
+      </div>
+    </div>
+	{% endif %}
 </div>
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript" src="{% static 'js/htmx.min.js' %}"></script>
+
+<script type="text/javascript">
+document.body.addEventListener("deleteReport", function(evt){
+    alert("myEvent was triggered!");
+})
+</script>
+
 {% endblock %}
 

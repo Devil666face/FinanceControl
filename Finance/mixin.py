@@ -10,6 +10,7 @@ from Finance.forms import (
 )
 from django.views.generic import (
     FormView,
+    View,
 )
 from django.urls import reverse_lazy
 
@@ -22,4 +23,9 @@ class OrderMixin(LoginMixin, FormView):
     model = Order
     template_name = 'form.html'
     success_url = reverse_lazy('order_list')
+
+class ReportMixin(LoginMixin, View):
+    model = Report
+    success_url = reverse_lazy('report_list')
+    template_name = 'form.html'
    

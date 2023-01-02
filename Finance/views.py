@@ -24,6 +24,7 @@ from Finance.forms import (
 from Finance.mixin import (
     LoginMixin,
     OrderMixin,
+    ReportMixin,
 )
 from Finance.utils import (
     get_now_month,
@@ -102,9 +103,7 @@ class CategoryCreateView(LoginMixin, CreateView):
     success_url = reverse_lazy('order_list')
 
 
-class ReportCreateView(LoginMixin, CreateView):
-    model = Report
-    template_name = 'form.html'
+class ReportCreateView(ReportMixin, CreateView):
     form_class = ReportCreateForm
 
     def get_success_url(self):
@@ -129,32 +128,39 @@ class ReportCreateView(LoginMixin, CreateView):
             return super().form_invalid(form)
 
 
-class ReportDetailViewPdf(LoginMixin, DetailView):
-    model = Report
+class ReportDetailViewPdf(ReportMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
         return HttpResponse(self.object.file, content_type="application/pdf")
 
 
-class ReportListView(LoginMixin, ListView):
-    model = Report
+class ReportListView(ReportMixin, ListView):
     template_name = 'report_list'
 
     def get_queryset(self):
         self.queryset = super().get_queryset()
         if self.queryset:
             self.revenue, self.expend, self.balance = get_totals(self.queryset)
+        # self.queryset = Report.objects.filter(slug='12312312asddqw').all()
         return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['revenue'] = self.revenue
-        context['expend'] = self.expend
-        context['balance'] = self.balance
+        if self.queryset:
+            context['revenue'] = self.revenue
+            context['expend'] = self.expend
+            context['balance'] = self.balance
         return context
 
 
-class ReportDetailView(LoginMixin, DeleteView):
-    model = Report
+class ReportDetailView(ReportMixin, DetailView):
     template_name = 'report_detail'
+
+
+class ReportDeleteView(ReportMixin, DeleteView):
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        self.delete(request, *args, **kwargs)
+        # return redirect(request.META.get('HTTP_REFERER','/'))
+        return HttpResponse('')

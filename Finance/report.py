@@ -29,8 +29,8 @@ class ReportMaker:
 	def __init__(self, obj):
 		self.obj = obj
 		current_month = str(self.obj.date_month).split('-')[1]
-		self.obj.title = self._get_title(current_month)
-		self.queryset = self._get_queryset(current_month)
+		self.obj.title = self._get_title(self.obj.date_month)
+		self.queryset = self._get_queryset(self.obj.date_month)
 		if self.queryset:
 			self.table_for_record = self._make_table_for_record()
 			print(self.table_for_record)
@@ -74,12 +74,21 @@ class ReportMaker:
 		table_for_record = [_get_row(order) for order in self.queryset]
 		return table_for_record
 			
-	def _get_queryset(self, current_month):
-		first_day, last_day = get_first_last_date_for_month(current_month)
+	def _get_queryset(self, date_month):
+		current_month, current_year = self._get_month_and_year(date_month)
+		first_day, last_day = get_first_last_date_for_month(current_month=current_month, current_year=current_year)
 		return Order.objects.filter(created_at__gte=first_day, created_at__lte=last_day).order_by('created_at').select_related('category')
 		
-	def _get_title(self, current_month):
-	    return f'{datetime(datetime.today().year, int(current_month), 1).strftime("%B")} {datetime.today().year}'
+	def _get_title(self, date_month):
+		current_month, current_year = self._get_month_and_year(date_month)
+		return f'{datetime(current_year, current_month, 1).strftime("%B")} {current_year}'
+
+	def _get_month_and_year(self, date_month):
+		date_month = date_month.strftime('%Y-%m-%d')
+		current_month = date_month.split('-')[1]
+		current_year = date_month.split('-')[0]
+		return int(current_month), int(current_year)
+		
 
 	def get_obj(self):
 		return self.obj
