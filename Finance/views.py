@@ -10,8 +10,6 @@ from django.views.generic import (
     DeleteView,
     RedirectView
 )
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect
 from Finance.models import (
@@ -21,7 +19,6 @@ from Finance.models import (
     Report
 )
 from Finance.forms import (
-    UserLoginForm,
     CategoryCreateForm,
 )
 from Finance.mixin import (
@@ -32,6 +29,7 @@ from Finance.utils import (
     get_now_month,
     get_first_last_date_for_month,
     remove_old_report,
+    get_totals,
 )
 from Finance.forms import (
     OrderCreateForm,
@@ -39,27 +37,6 @@ from Finance.forms import (
 )
 from Finance.filter import OrderFilter
 from Finance.report import ReportMaker
-from config.settings import DEBUG
-
-
-class UserLogin(LoginView):
-    authentication_form = UserLoginForm
-    template_name = 'Finance/login.html'
-    redirect_authenticated_user = True
-    next_page = '/'
-
-
-class UserLogout(LogoutView):
-    next_page = '/login/'
-
-
-class PasswordChangeView(PasswordChangeView):
-    pass
-
-
-class PasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = 'Finance/template_replace.html'
-    next_page = '/'
 
 
 class OrderListView(LoginMixin, ListView):
@@ -163,3 +140,21 @@ class ReportDetailViewPdf(LoginMixin, DetailView):
 class ReportListView(LoginMixin, ListView):
     model = Report
     template_name = 'report_list'
+
+    def get_queryset(self):
+        self.queryset = super().get_queryset()
+        if self.queryset:
+            self.revenue, self.expend, self.balance = get_totals(self.queryset)
+        return self.queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['revenue'] = self.revenue
+        context['expend'] = self.expend
+        context['balance'] = self.balance
+        return context
+
+
+class ReportDetailView(LoginMixin, DeleteView):
+    model = Report
+    template_name = 'report_detail'

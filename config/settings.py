@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'ckeditor',
+    'customauth.apps.CustomauthConfig',
     'Finance.apps.FinanceConfig',
     'django_filters',
     'crispy_forms',

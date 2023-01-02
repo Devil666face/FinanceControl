@@ -18,7 +18,17 @@ def remove_old_report(object):
         Report.objects.get(slug=object.slug).delete()
         return True
     return False
-    
+
+def get_totals(queryset):
+    revenue = 0
+    expend = 0
+    balance = 0
+    for report in queryset:
+        revenue = revenue + report.revenue
+        expend = expend + report.expend
+        balance = balance + report.balance
+    return revenue, expend, balance
+
 # def get_now_first_day_of_month():
 #     today = datetime.today()
 #     date = datetime(today.year, today.month, 1)

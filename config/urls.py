@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/',include('ckeditor_uploader.urls')),
     path('', include('Finance.urls')),
+    path('', include('customauth.urls')),
 ]
 
 if settings.DEBUG:
