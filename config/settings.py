@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-1j%+fi@^frpf#3niemo+%rb_r3*(xgqj)xu_73#kd!8)=9%t*%
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['finance.devilface.ru']
 
 INSTALLED_APPS = [
     'colorfield',
@@ -118,8 +118,8 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = configs.CKEDITOR_CONFIGS
 
-CSRF_COOKIE_DOMAIN = ['127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1']
+CSRF_COOKIE_DOMAIN = ['finance.devilface.ru']
+CSRF_TRUSTED_ORIGINS = ['https://finance.devilface.ru']
 CSRF_USE_SESSIONS = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
