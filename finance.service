@@ -1,0 +1,13 @@
+[Unit]
+Description=finance control django daemon
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/FinanceControl
+ExecStart=/var/www/FinanceControl/start.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
