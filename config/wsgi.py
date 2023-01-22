@@ -18,7 +18,7 @@ application.add_files(root=MEDIA_ROOT, prefix="media/")
 if not DEBUG:
     from sys import platform
     if platform == "linux" or platform == "linux2":
-        os.system('ifconfig|grep inet')
+        os.system('ip addr show|grep inet')
     elif platform == "win32":
         os.system('ipconfig|findstr IPv4')
         os.system(f'start http://{host}')
