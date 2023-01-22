@@ -1,2 +1,2 @@
 #!/bin/bash
-./venv/bin/waitress-serve --listen 127.0.0.1:8002 config.wsgi:application
+./venv/bin/waitress-serve --listen 127.0.0.1:8003 config.wsgi:application
